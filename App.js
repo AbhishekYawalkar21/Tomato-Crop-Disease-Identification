@@ -1,43 +1,27 @@
-import { useFonts } from 'expo-font';
-import * as SplashScreen from "expo-splash-screen";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NavigationContainer } from "@react-navigation/native"
-import { FONTS } from './constants/fonts'; 
-import { useCallback } from 'react';
-import { Login, Signup, Welcome } from './screens';
-import { Provider } from 'react-redux'
-import { store } from './store/store'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './screens/LoginScreen';
+import HomeScreen from './screens/HomeScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-  const [fontsLoaded] = useFonts(FONTS);
+const App = () =>
+{
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                <Stack.Screen name="Register" component={RegisterScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
+                <Stack.Screen name="Home" component={HomeScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+};
 
-  const onLayoutRootView = useCallback(async ()=>{
-    if(fontsLoaded) {
-      await SplashScreen.hideAsync()
-    }
-  },[fontsLoaded])
-
-  if(!fontsLoaded) {
-    return null;
-  }
-
-  return ( 
-    <Provider store={store}>
-   <SafeAreaProvider onLayout={onLayoutRootView}>
-      <NavigationContainer>
-        <Stack.Navigator 
-          screenOptions={{ headerShown: false }}
-          initialRouteName='Welcome'>
-        <Stack.Screen name="Welcome" component={Welcome}/>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="Signup" component={Signup}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-  </SafeAreaProvider>
-  </Provider>
-  );
-}
-
+export default App;
